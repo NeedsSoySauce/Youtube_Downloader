@@ -1,0 +1,3 @@
+{
+    "outtmpl": "Downloads/%(title)s.%(ext)s"
+}
