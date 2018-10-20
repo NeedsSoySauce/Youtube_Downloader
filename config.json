@@ -1,5 +1,5 @@
 {
     "max_dl_threads": 4,
     "output_template": "%(title)s.%(ext)s",
-    "savepath": "D:/Pictures/Camera Roll"
+    "savepath": "C:/Users/Feras Albaroudi/Desktop"
 }

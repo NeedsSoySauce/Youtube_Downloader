@@ -10,6 +10,8 @@ CONFIG = "config.json"
 # These are used to label GUI widgets
 SAVE_ENTRY = "savepath"
 URL_LABEL = "URL(s) to download"
+URL_LABEL_TEXT = "1. Enter YouTube URL(s) to download into the box below (one URL per line)\n2. Set the directory to save the downloaded files\n3. Click download!"
+                    
 URL_ENTRY = "URL(s)"
 DL_BUTTON = "Download"
 
@@ -104,8 +106,6 @@ def update_save_path():
 
     update_config(config_opts)
 
-    print(config_opts)
-
 # Downloads the video from the given url and returns True if it's a success, False otherwise
 def dl_URL(url):
     global running_threads
@@ -154,10 +154,14 @@ def main():
     # ydl_opts['progress_hooks'] = [dl_finished, dl_downloading, dl_error]
     
     # Window settings
-    app.setSize(300, 300)
+    app.setPadding(10,10)
+
+    # Adds a right-click edit menu to all entry widgets
+    app.addMenuEdit()
 
     # URL entry
-    app.addLabel(URL_LABEL)
+    app.addLabel(URL_LABEL, URL_LABEL_TEXT)
+    app.setLabelAlign(URL_LABEL, "left")
     app.addScrolledTextArea(URL_ENTRY)
 
     # Save path selection
