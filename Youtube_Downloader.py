@@ -79,13 +79,19 @@ def progress_callback(progress):
 
 # Writes cfg_dict to the config file
 def update_config(cfg_dict):
-    with open(CONFIG, 'w') as cfg_file:
+    with open(CONFIG, 'w+') as cfg_file:
         json.dump(cfg_dict, cfg_file, sort_keys=True, indent=4 )
 
 # Loads config.json and returns it as a dict
 def load_config():   
-    with open(CONFIG, 'r') as cfg:
-        config_opts = json.load(cfg)
+    config_opts = {}
+    try:
+        with open(CONFIG, 'r') as cfg:
+            config_opts = json.load(cfg)
+    except FileNotFoundError:
+        update_config(config_opts)
+        with open(CONFIG, 'r') as cfg:
+            config_opts = json.load(cfg)
     return config_opts
 
 # Checks the options in the given config and corrects any that won't work
@@ -99,6 +105,9 @@ def validate_config(config_opts):
 
     if ('max_dl_threads' not in keys or not isinstance(config_opts['max_dl_threads'], int) or config_opts['max_dl_threads'] <= 0):
         config_opts['max_dl_threads'] = os.cpu_count()
+
+    if ('output_template' not in keys or config_opts['output_template'] == ""):
+        config_opts['output_template'] = "%(title)s.%(ext)s"
  
     update_config(config_opts)
 
