@@ -69,13 +69,18 @@ def progress_callback(progress):
     filename = os.path.basename(progress['filename']).split(".")[0]    
 
     if status == 'finished':
-        print('Converting "%s" ...' % filename)
+        print_safe('Converting "%s" ...' % filename)
     elif status == 'downloading':
         percent = progress['downloaded_bytes'] / progress['total_bytes'] * 100
         message = 'Downloading "%s": %.1f%%' % (filename, percent)
-        print(message) 
+        print_safe(message) 
     elif status == 'error':
-        print(progress['Error download "%s"'], filename)
+        message = 'Error downloading "%s"' % filename
+        print_safe(message)
+
+# Thread safe print with explicit newline
+def print_safe(text):
+    sys.stdout.write("{0}\n".format(text))
 
 # Writes cfg_dict to the config file
 def update_config(cfg_dict):
@@ -140,13 +145,13 @@ def update_save_path():
 def dl_URL(url):
     global running_threads
     running_threads += 1
-    print("Thread started for:", url)
+    print_safe("Thread started for: %s" % url)
 
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url]) # Note, the url must be passed as a list 
     except Exception as error:
-        print('"%s" failed with error: %s' % (url, error))
+        print_safe('"%s" failed with error: %s' % (url, error))
 
     running_threads -= 1
 
